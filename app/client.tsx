@@ -15,6 +15,7 @@ export default function UserList() {
           <li key={user.id}>{user.email}</li>
         ))}
       </ul>
+      <Button onClick={() => signOut()}>Sign Out</Button>
     </main>
   );
 }
