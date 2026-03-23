@@ -4,9 +4,9 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react"; // Optional: for a nice loading spinner
+import { Loader2 } from "lucide-react";
 
-import { loginSchema, LoginFormValues } from "@/lib/validations/auth";
+import { registerSchema, RegisterFormValues } from "@/lib/validations/auth";
 import { Card } from "@/components/ui/card";
 import {
   Field,
@@ -18,23 +18,26 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  const onSubmit = async (data: LoginFormValues) => {
+  const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      toast.success("Welcome back!");
+      toast.success("Account created successfully!");
+      console.log(data);
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -47,14 +50,37 @@ export default function SignInPage() {
       <Card className="max-w-md w-full mx-auto p-8 shadow-lg border-muted/50">
         {/* Header Section */}
         <div className="flex flex-col space-y-2 text-center mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Sign In</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Create Account</h1>
           <p className="text-sm text-muted-foreground">
-            Enter your credentials to access your account
+            Enter your details to get started
           </p>
         </div>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-          <FieldGroup className="space-y-4">
+          <FieldGroup>
+            {/* Name Field */}
+            <Controller
+              name="name"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel className="text-sm font-semibold mb-1.5">
+                    Full Name
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="text"
+                    placeholder="John Doe"
+                    disabled={isLoading}
+                    className="h-11 transition-all focus:ring-2"
+                  />
+                  {fieldState.error && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
             {/* Email Field */}
             <Controller
               name="email"
@@ -84,17 +110,32 @@ export default function SignInPage() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <FieldLabel className="text-sm font-semibold">
-                      Password
-                    </FieldLabel>
-                    <button
-                      type="button"
-                      className="text-xs text-primary hover:underline cursor-pointer font-medium"
-                    >
-                      Forgot password?
-                    </button>
-                  </div>
+                  <FieldLabel className="text-sm font-semibold mb-1.5">
+                    Password
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="password"
+                    placeholder="••••••••"
+                    disabled={isLoading}
+                    className="h-11 transition-all focus:ring-2"
+                  />
+                  {fieldState.error && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            {/* Confirm Password Field */}
+            <Controller
+              name="confirmPassword"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel className="text-sm font-semibold mb-1.5">
+                    Confirm Password
+                  </FieldLabel>
                   <Input
                     {...field}
                     type="password"
@@ -118,20 +159,20 @@ export default function SignInPage() {
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Signing in...
+                Creating account...
               </>
             ) : (
-              "Sign In"
+              "Create Account"
             )}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground mt-4">
-            Don&apos;t have an account?{" "}
+            Already have an account?{" "}
             <Link
-              href="/sign-up"
+              href="/sign-in"
               className="text-primary cursor-pointer font-semibold hover:underline"
             >
-              Create one
+              Sign in
             </Link>
           </p>
         </form>
