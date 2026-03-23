@@ -2,8 +2,11 @@ import { caller, HydrateClient, prefetch, trpc } from "@/trpc/server";
 import UserList from "./client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
+import { requireAuth } from "@/lib/auth-utils";
 
 export default async function Home() {
+  await requireAuth();
+
   prefetch(trpc.getUser.queryOptions());
 
   return (

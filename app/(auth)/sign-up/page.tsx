@@ -17,8 +17,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { signUp } from "@/lib/auth-client";
+import { redirect, useRouter } from "next/navigation";
 
 export default function SignUpPage() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<RegisterFormValues>({
@@ -34,10 +37,28 @@ export default function SignUpPage() {
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      toast.success("Account created successfully!");
-      console.log(data);
+      await signUp.email(
+        {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        },
+        {
+          onRequest: (ctx) => {
+            setIsLoading(true);
+          },
+          onSuccess: (ctx) => {
+            toast.success("Welcome on Board!");
+            router.push("/");
+          },
+          onError: (ctx) => {
+            toast.error(
+              ctx.error.message ||
+                "Failed to create account. Please try again.",
+            );
+          },
+        },
+      );
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {

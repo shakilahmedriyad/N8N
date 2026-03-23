@@ -17,8 +17,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "@/lib/auth-client";
 
 export default function SignInPage() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<LoginFormValues>({
@@ -32,9 +35,27 @@ export default function SignInPage() {
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      toast.success("Welcome back!");
+      await signIn.email(
+        {
+          email: data.email,
+          password: data.password,
+        },
+        {
+          onRequest: (ctx) => {
+            setIsLoading(true);
+          },
+          onSuccess: (ctx) => {
+            toast.success("Welcome back!");
+            router.push("/");
+          },
+          onError: (ctx) => {
+            toast.error(
+              ctx.error.message ||
+                "Invalid email or password. Please try again.",
+            );
+          },
+        },
+      );
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {
