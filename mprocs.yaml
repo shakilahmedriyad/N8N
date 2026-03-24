@@ -1,0 +1,9 @@
+procs:
+  inngest:
+    cmd: ["yarn", "run", "inngest:dev"]
+
+  next:
+    cmd: ["yarn", "run", "dev"]
+
+  studio:
+    cmd: ["yarn", "run", "prisma:studio"]
