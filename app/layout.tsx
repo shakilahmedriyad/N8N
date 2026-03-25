@@ -10,8 +10,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "N8N Automation Buddy",
-  description: "Your Automation buddy",
+  title: "Automation Studio",
+  description: "A place where you can create and manage your automations",
 };
 
 export default function RootLayout({

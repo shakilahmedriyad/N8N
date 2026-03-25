@@ -1,10 +1,4 @@
-import { AppSidebar } from "@/components/app-sidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import AppHeader from "@/components/app-header";
 
 export default function RootLayout({
   children,
@@ -12,13 +6,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <TooltipProvider>
-          <main>{children}</main>
-        </TooltipProvider>
-      </SidebarInset>
-    </SidebarProvider>
+    <>
+      <AppHeader />
+      {children}
+    </>
   );
 }
