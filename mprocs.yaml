@@ -5,5 +5,5 @@ procs:
   next:
     cmd: ["yarn", "run", "dev"]
 
-  studio:
-    cmd: ["yarn", "run", "prisma:studio"]
+  # studio:
+  #   cmd: ["yarn", "run", "prisma:studio"]
