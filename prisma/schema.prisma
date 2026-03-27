@@ -18,6 +18,9 @@ model User {
   email         String
   emailVerified Boolean   @default(false)
   image         String?
+
+  workflows     workflow[]
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
@@ -73,4 +76,16 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+
+model workflow {
+  id        String   @id  @default(cuid())
+  name      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }

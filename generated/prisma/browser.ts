@@ -37,3 +37,8 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type Verification = Prisma.VerificationModel
+/**
+ * Model workflow
+ * 
+ */
+export type workflow = Prisma.workflowModel
